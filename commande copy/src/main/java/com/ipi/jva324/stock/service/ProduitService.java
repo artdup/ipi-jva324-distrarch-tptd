@@ -66,5 +66,4 @@ public class ProduitService {
 
         return receptionDeProduitRepository.save(rp);
     }
-    
 }

@@ -17,13 +17,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import com.ipi.jva324.commande.config.TestLocalConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 @ExtendWith(SpringExtension.class) // Junit 4 : @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(Jva324Application.class)
-@SpringJUnitConfig(TestLocalConfiguration.class)
 public class CommandeTest {
 
     /** TODO rm, pas utile ici */

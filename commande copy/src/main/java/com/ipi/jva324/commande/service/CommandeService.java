@@ -64,11 +64,11 @@ public class CommandeService{
         return res.isPresent() ? res.get() : null;
     }
         // TODO get quantiteStockConnu, d'abord par RestTemplate
-public Commande createCommande(Commande commande) {
+    public Commande createCommande(Commande commande) {
     commande.setStatus("created");
 
-    // utilisez le produit obtenu pour effectuer les opérations nécessaires
-    ProduitEnStock produit = commandeProduit.getProduit(commande.getProduitId());
+    ProduitEnStock produit = commandeProduit.getProduit();
+    // Utilisez le produit obtenu pour effectuer les opérations nécessaires
     logger.debug("createCommande produitId=" + produit.getId());
     long quantiteDisponible = (produit == null) ? 0 : produit.getQuantiteDisponible();
     commande.setQuantiteDisponibleStockConnu(quantiteDisponible);
@@ -77,29 +77,23 @@ public Commande createCommande(Commande commande) {
 }
 
 
+    public Commande validateCommande(Commande commande)
+            throws StockInsuffisantCommandeException, CommandeInvalideException {
+        if (commande.getQuantite() <= 0) {
+            throw new CommandeInvalideException("quantite doit être au moins 1"); // TODO plutôt Hibernate validator ?
+        }
 
-public Commande validateCommande(Commande c) throws StockInsuffisantCommandeException, CommandeInvalideException {
-    if (c == null || c.getProduitId() == null || c.getQuantite() == null) {
-        throw new CommandeInvalideException("Commande invalide !");
+        // vérifie que le stock est suffisant
+        ProduitEnStock produitEnStockFound = produitService.getProduit(commande.getProduitId());
+        long quantiteDisponible = (produitEnStockFound == null) ? 0 : produitEnStockFound.getQuantiteDisponible();
+        commande.setQuantiteDisponibleStockConnu(quantiteDisponible);
+        if (commande.getQuantite() > quantiteDisponible) {
+            throw new StockInsuffisantCommandeException();
+        }
+
+        commande.setStatus("validated");
+        return commandeRepository.save(commande);
     }
-
-    ProduitEnStock p = commandeProduitService.getProduit(c.getProduitId());
-    if (p == null) {
-        throw new CommandeInvalideException("Produit inexistant !");
-    }
-
-    if (p.getQuantiteDisponible() < c.getQuantite()) {
-        throw new StockInsuffisantCommandeException();
-    }
-
-    c.setStatus("validated");
-    commandeRepository.save(c);
-
-    p.setQuantiteDisponible(p.getQuantiteDisponible() - c.getQuantite());
-    commandeProduitService.updateProduit(p);
-
-    return c;
-}
 
     /**
      * Aide, TODO interdire de changer status, quantiteStockConnu...
@@ -116,10 +110,6 @@ public Commande validateCommande(Commande c) throws StockInsuffisantCommandeExce
      */
     public void deleteCommande(Commande commande) {
         commandeRepository.deleteById(commande.getId());
-    }
-
-    public Commande createCommande(long l, int i) {
-        return null;
     }
 
 }

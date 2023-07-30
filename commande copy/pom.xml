@@ -10,10 +10,10 @@
 	</parent>
 
 	<groupId>com.ipi.jva324</groupId>
-	<artifactId>commande</artifactId>
+	<artifactId>stock</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
-	<name>commande</name>
+	<name>stock</name>
 	<description>TP IPI Architectures distribuées</description>
 
 	<properties>
@@ -145,7 +145,7 @@
 			</plugin>
 
 			<!-- Sinon erreur au build :
-			Failed to execute goal org.apache.maven.plugins:maven-resources-plugin:3.3.0:resources (default-resources) on project commande: filtering /home/mdutoo/dev/ipi/workspace/ipi-jva324-distri/commande/src/main/resources/application.properties to /home/mdutoo/dev/ipi/workspace/ipi-jva324-distri/commande/target/classes/application.properties failed with MalformedInputException: Input length = 1
+			Failed to execute goal org.apache.maven.plugins:maven-resources-plugin:3.3.0:resources (default-resources) on project stock: filtering /home/mdutoo/dev/ipi/workspace/ipi-jva324-distri/stock/src/main/resources/application.properties to /home/mdutoo/dev/ipi/workspace/ipi-jva324-distri/stock/target/classes/application.properties failed with MalformedInputException: Input length = 1
 			https://stackoverflow.com/questions/65910112/maven-clean-install-failed-to-execute-goal-org-apache-maven-pluginsmaven-resou
 			-->
 			<plugin>
